@@ -11,6 +11,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"; // 1. Import komponen Drawer
+
 // --- Skema Zod untuk form input (sesuaikan dengan ekspektasi FakeStoreAPI untuk POST/PUT) ---
 const productFormSchema = z.object({
   title: z.string().min(3, "Nama produk minimal 3 karakter"),
@@ -232,166 +243,188 @@ export default function ProductsPage() {
     <>
       <NavBar />
       <main className="mt-26 mx-6 p-4">
-        {" "}
-        {/* Tambah padding biar ada jarak */}
         <h1 className="text-4xl font-extrabold text-center my-8">
           Koleksi Produk Pilihan
         </h1>
         <p className="text-center mb-6 text-gray-700">
           Jelajahi produk atau tambahkan item baru ke daftar!
         </p>
-        <div className="mb-8 flex flex-col gap-4 items-center sm:flex-row sm:justify-between">
+
+        {/* 2. Ganti tombol dengan struktur Drawer */}
+        <div className="mb-8 flex flex-col gap-4 items-center sm:flex-row">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari produk berdasarkan nama..."
-            className="w-full sm:w-2/3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="grow w-full sm:w-2/3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
-            onClick={handleAddProductClick}
-            className="w-full sm:w-auto px-6 py-3 bg-neutral-950 outline-2 text-white font-semibold rounded-lg shadow-md focus:outline-none hover:bg-white hover:text-black focus:ring-2 focus:ring-offset-2 focus:ring-neutral-950 transition-colors duration-200"
+
+          {/* Kontrol Drawer ada di sini */}
+          <Drawer
+            open={showAddProductForm}
+            onOpenChange={setShowAddProductForm}
           >
-            Tambahkan Produk
-          </button>
+            <DrawerTrigger asChild>
+              <button
+                onClick={handleAddProductClick}
+                className="w-full sm:w-auto px-6 py-3 bg-neutral-950 outline-2 text-white font-semibold rounded-lg shadow-md focus:outline-none hover:bg-white hover:text-black focus:ring-2 focus:ring-offset-2 focus:ring-neutral-950 transition-colors duration-200"
+              >
+                Tambahkan Produk
+              </button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>
+                    {selectedProduct ? "Edit Produk" : "Tambah Produk Baru"}
+                  </DrawerTitle>
+                  <DrawerDescription>
+                    Isi detail produk di bawah ini. Klik simpan jika sudah
+                    selesai.
+                  </DrawerDescription>
+                </DrawerHeader>
+
+                {/* 1. Bungkus form fields dalam div yang bisa di-scroll */}
+                <div className="p-4 overflow-y-auto max-h-[60vh]">
+                  <form
+                    id="product-form" // 2. Beri ID pada form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-4"
+                  >
+                    {/* Semua field input (Nama, Harga, Deskripsi, dll.) ada di sini */}
+                    <div>
+                      <label
+                        htmlFor="title"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Nama Produk
+                      </label>
+                      <input
+                        id="title"
+                        {...register("title")}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.title && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.title.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="price"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Harga
+                      </label>
+                      <input
+                        id="price"
+                        type="number"
+                        step="0.01"
+                        {...register("price", { valueAsNumber: true })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.price && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.price.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="description"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Deskripsi
+                      </label>
+                      <textarea
+                        id="description"
+                        {...register("description")}
+                        rows={3}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                      ></textarea>
+                      {errors.description && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.description.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="category"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Kategori
+                      </label>
+                      <input
+                        id="category"
+                        {...register("category")}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.category && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.category.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="image"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Link Gambar (URL)
+                      </label>
+                      <input
+                        id="image"
+                        type="url"
+                        {...register("image")}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.image && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.image.message}
+                        </p>
+                      )}
+                    </div>
+                  </form>
+                  <DrawerFooter>
+                    <button
+                      type="submit"
+                      form="product-form" // Hubungkan ke form dengan ID
+                      disabled={isSubmitting}
+                      className="w-full px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                    >
+                      {isSubmitting
+                        ? "Mengirim..."
+                        : selectedProduct
+                        ? "Update Produk"
+                        : "Tambah Produk"}
+                    </button>
+                    <DrawerClose asChild>
+                      <button
+                        type="button"
+                        onClick={handleCloseForm}
+                        className="w-full px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      >
+                        Batal
+                      </button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </div>
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
-        {/* Form Tambah/Edit Produk (Conditional Rendering) */}
-        {showAddProductForm && (
-          <div className="bg-white p-6 rounded-lg shadow-xl mb-8 border border-gray-200 relative">
-            <button
-              onClick={handleCloseForm}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl"
-              aria-label="Tutup form"
-            >
-              &times;
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">
-              {selectedProduct ? "Edit Produk" : "Tambah Produk Baru"}
-            </h2>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Nama Produk
-                </label>
-                <input
-                  id="title"
-                  {...register("title")}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.title && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.title.message}
-                  </p>
-                )}
-              </div>
 
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Harga
-                </label>
-                <input
-                  id="price"
-                  type="number"
-                  step="0.01"
-                  {...register("price", { valueAsNumber: true })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.price && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.price.message}
-                  </p>
-                )}
-              </div>
+        {/* 4. Hapus blok form lama dari sini */}
+        {/* Blok <div className="bg-white p-6 ..."> yang lama sudah dihapus */}
 
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Deskripsi
-                </label>
-                <textarea
-                  id="description"
-                  {...register("description")}
-                  rows={3}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                ></textarea>
-                {errors.description && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.description.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="category"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Kategori
-                </label>
-                <input
-                  id="category"
-                  {...register("category")}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.category && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.category.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="image"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Link Gambar (URL)
-                </label>
-                <input
-                  id="image"
-                  type="url"
-                  {...register("image")}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                {errors.image && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.image.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex gap-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                >
-                  {isSubmitting
-                    ? "Mengirim..."
-                    : selectedProduct
-                    ? "Update Produk"
-                    : "Tambah Produk"}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCloseForm} // Pakai handleCloseForm untuk batal/tutup
-                  className="px-6 py-2 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                >
-                  Batal
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-        {/* Daftar Produk */}
+        {/* Daftar Produk (logika ini tetap sama) */}
         {filteredProducts.length === 0 && searchQuery !== "" ? (
           <div className="h-dvh text-center py-16">
             <p className="text-xl text-gray-500">

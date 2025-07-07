@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -8,8 +10,8 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "Toko Online",
-  description: "Menjual barang-barang keren",
+  title: "TokoKami",
+  description: "Menjual barang-barang keren dari Indonesia",
 };
 
 export default function RootLayout({
@@ -19,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${quicksand.variable} antialiased`}>{children}</body>
+      <body className={`${quicksand.variable} antialiased`}>
+        <NavBar></NavBar>
+        {children}
+        <Footer></Footer>
+      </body>
     </html>
   );
 }

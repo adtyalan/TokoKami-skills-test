@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
@@ -22,6 +23,7 @@ type Product = {
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter(); // Inisialisasi router untuk navigasi
   const id = params.id; // Mengambil ID dari URL
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -96,18 +98,24 @@ export default function ProductDetailPage() {
   return (
     <>
       <NavBar />
-      <main className="container mx-auto px-4 py-28">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <main className="flex flex-col gap-6 mx-auto px-4 py-28">
+        {/* Tombol Back */}
+        <button
+          onClick={() => router.back()} // Navigasi ke halaman sebelumnya
+          className="w-fit bg-gray-200 text-gray-800 font-semibold px-4 py-2 rounded-md shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          <ArrowLeft />
+        </button>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center justify-items-center">
           {/* Kolom Gambar */}
-          <div className="w-full">
-            <Image
-              src={product.image}
-              alt={product.title}
-              width={500}
-              height={500}
-              className="w-full h-auto object-contain rounded-lg shadow-lg"
-            />
-          </div>
+          <Image
+            src={product.image}
+            alt={product.title}
+            width={500}
+            height={500}
+            className="w-fit h-fit object-contain rounded-lg shadow-lg"
+          />
 
           {/* Kolom Detail Produk */}
           <div className="flex flex-col gap-4">
@@ -134,7 +142,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
