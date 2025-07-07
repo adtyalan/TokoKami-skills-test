@@ -181,41 +181,46 @@ export default function Hero() {
         <h1 className="text-4xl font-extrabold text-center mx-8 py-8">
           FAQ (Frequently Asked Questions)
         </h1>
-        <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
-          <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
-            Apa itu TokoKami?
-          </summary>
-          TokoKami adalah platform e-commerce yang didedikasikan untuk
-          mempromosikan dan menjual produk-produk lokal Indonesia. Kami percaya
-          bahwa dengan mendukung produk lokal, kita dapat membantu mengembangkan
-          ekonomi lokal, menciptakan lapangan kerja, dan melestarikan warisan
-          budaya Indonesia. Di TokoKami, Anda dapat menemukan berbagai produk
-          berkualitas tinggi yang dibuat oleh pengrajin lokal, mulai dari
-          kerajinan tangan, pakaian, makanan, hingga barang-barang rumah tangga.
-        </details>
-        <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
-          <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
-            Mengapa menggunakan TokoKami?
-          </summary>
-          TokoKami menawarkan berbagai keuntungan bagi pembeli dan penjual. Bagi
-          pembeli, kami menyediakan akses mudah ke produk lokal berkualitas
-          tinggi dengan harga yang kompetitif. Kami juga memastikan bahwa setiap
-          produk pasti asli dan berasal dari pelaku usaha lokal terpercaya. Bagi
-          penjual, TokoKami memberikan platform yang mudah digunakan untuk
-          memasarkan produk ke pasar yang lebih luas, serta dukungan promosi dan
-          pelatihan untuk meningkatkan penjualan.
-        </details>
-        <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
-          <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
-            Apa saja fitur yang tersedia di TokoKami?
-          </summary>
-          TokoKami menyediakan berbagai fitur untuk meningkatkan pengalaman
-          belanja online Anda. Fitur-fitur ini termasuk pencarian produk yang
-          mudah, sistem pembayaran yang aman, pelacakan pesanan secara
-          real-time, ulasan produk dari pembeli lain, serta layanan pelanggan
-          yang responsif. Selain itu, kami juga menyediakan fitur promosi khusus
-          untuk produk lokal unggulan dan rekomendasi produk sesuai minat Anda.
-        </details>
+        <section className="flex flex-col gap-4">
+          <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
+            <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
+              Apa itu TokoKami?
+            </summary>
+            TokoKami adalah platform e-commerce yang didedikasikan untuk
+            mempromosikan dan menjual produk-produk lokal Indonesia. Kami
+            percaya bahwa dengan mendukung produk lokal, kita dapat membantu
+            mengembangkan ekonomi lokal, menciptakan lapangan kerja, dan
+            melestarikan warisan budaya Indonesia. Di TokoKami, Anda dapat
+            menemukan berbagai produk berkualitas tinggi yang dibuat oleh
+            pengrajin lokal, mulai dari kerajinan tangan, pakaian, makanan,
+            hingga barang-barang rumah tangga.
+          </details>
+          <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
+            <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
+              Mengapa menggunakan TokoKami?
+            </summary>
+            TokoKami menawarkan berbagai keuntungan bagi pembeli dan penjual.
+            Bagi pembeli, kami menyediakan akses mudah ke produk lokal
+            berkualitas tinggi dengan harga yang kompetitif. Kami juga
+            memastikan bahwa setiap produk pasti asli dan berasal dari pelaku
+            usaha lokal terpercaya. Bagi penjual, TokoKami memberikan platform
+            yang mudah digunakan untuk memasarkan produk ke pasar yang lebih
+            luas, serta dukungan promosi dan pelatihan untuk meningkatkan
+            penjualan.
+          </details>
+          <details className="group mx-8 p-4 border border-neutral-400 rounded-md">
+            <summary className="font-semibold border-neutral-400 group-open:mb-2 cursor-pointer">
+              Apa saja fitur yang tersedia di TokoKami?
+            </summary>
+            TokoKami menyediakan berbagai fitur untuk meningkatkan pengalaman
+            belanja online Anda. Fitur-fitur ini termasuk pencarian produk yang
+            mudah, sistem pembayaran yang aman, pelacakan pesanan secara
+            real-time, ulasan produk dari pembeli lain, serta layanan pelanggan
+            yang responsif. Selain itu, kami juga menyediakan fitur promosi
+            khusus untuk produk lokal unggulan dan rekomendasi produk sesuai
+            minat Anda.
+          </details>
+        </section>
       </article>
     </>
   );
