@@ -3,8 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import NavBar from "@/components/NavBar"; // Pastikan path ini benar
-import Footer from "@/components/Footer"; // Pastikan path ini benar
+import Link from "next/link";
 
 // Import untuk React Hook Form & Zod
 import { useForm } from "react-hook-form";
@@ -94,6 +93,11 @@ export default function ProductsPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    // BUG: Secara paksa mengatur posisi scroll ke paling atas.
+    window.scrollTo(0, 0);
+  });
 
   // Effect untuk filter produk berdasarkan search query
   useEffect(() => {
@@ -215,7 +219,6 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <>
-        <NavBar />
         <div className="h-screen flex flex-col items-center justify-center text-center my-8">
           <p className="text-xl">
             Lagi nyiapin produk-produk keren nih, sabar ya...
@@ -228,7 +231,6 @@ export default function ProductsPage() {
   if (error) {
     return (
       <>
-        <NavBar />
         <div className="h-screen flex flex-col items-center justify-center text-center my-8">
           <p className="text-xl text-red-500">{error}</p>
           <p className="text-lg">
@@ -241,7 +243,6 @@ export default function ProductsPage() {
 
   return (
     <>
-      <NavBar />
       <main className="mt-26 mx-6 p-4">
         <h1 className="text-4xl font-extrabold text-center my-8">
           Koleksi Produk Pilihan
@@ -440,13 +441,13 @@ export default function ProductsPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <div
+              // 2. Ganti div pembungkus dengan Link
+              <Link
+                href={`/products/${product.id}`}
                 key={product.id}
                 className="border-2 border-neutral-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-300 cursor-pointer flex flex-col"
-                onClick={() => {
-                  router.push(`/products/${product.id}`); // Navigasi ke halaman detail produk
-                }}
               >
+                {/* Konten kartu produk tetap sama */}
                 <img
                   src={product.image}
                   alt={product.title}
@@ -463,8 +464,6 @@ export default function ProductsPage() {
                   Kategori: {product.category}
                 </p>
                 <div className="flex items-center gap-2 mb-4">
-                  {" "}
-                  {/* Tambah mb-4 biar tombol tidak mepet */}
                   <span className="text-yellow-500">★</span>
                   <span className="font-bold">{product.rating?.rate}</span>
                   <span className="text-gray-500">
@@ -472,11 +471,10 @@ export default function ProductsPage() {
                   </span>
                 </div>
                 <div className="flex space-x-2 mt-auto">
-                  {" "}
-                  {/* Tombol Edit/Delete */}
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Penting: Hindari triggernya onClick card
+                      e.preventDefault(); // 4. Cegah navigasi saat klik tombol edit
+                      e.stopPropagation();
                       handleEdit(product);
                     }}
                     className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -485,7 +483,8 @@ export default function ProductsPage() {
                   </button>
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Penting: Hindari triggernya onClick card
+                      e.preventDefault(); // 5. Cegah navigasi saat klik tombol delete
+                      e.stopPropagation();
                       handleDelete(product.id);
                     }}
                     className="flex-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -493,12 +492,11 @@ export default function ProductsPage() {
                     Delete
                   </button>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
       </main>
-      <Footer />
     </>
   );
 }
